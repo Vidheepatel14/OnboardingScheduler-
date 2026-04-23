@@ -16,15 +16,21 @@ LOCAL_TIMEZONE = "America/New_York"
 
 # Hugging Face API configuration
 def _load_hf_token() -> str:
-    token = os.getenv("HF_TOKEN")
-    if token:
-        return token
-    try:
-        import streamlit as st
+    token = os.getenv("HF_TOKEN", "").strip().strip('"').strip("'")
+    if not token:
+        try:
+            import streamlit as st
 
-        return st.secrets["HF_TOKEN"]
-    except Exception:
-        return ""
+            token = str(st.secrets.get("HF_TOKEN", "")).strip().strip('"').strip("'")
+        except Exception:
+            token = ""
+    if token and not token.startswith("hf_"):
+        raise RuntimeError(
+            "HF_TOKEN is set but does not start with 'hf_'. "
+            "Check Streamlit secrets — the value should be your HuggingFace token "
+            "(format: hf_xxxxxxxxxxxxxxxxxxxx), with no quotes or extra whitespace."
+        )
+    return token
 
 
 HF_TOKEN = _load_hf_token()
