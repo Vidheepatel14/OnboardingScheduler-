@@ -25,7 +25,7 @@ try:
     from langchain_core.documents import Document
     from langchain_text_splitters import RecursiveCharacterTextSplitter
     import rank_bm25  # noqa: F401
-    from sentence_transformers import CrossEncoder
+    from sentence_transformers import CrossEncoder, SentenceTransformer
 except ImportError as exc:
     DirectoryLoader = None
     PyMuPDFLoader = None
@@ -34,6 +34,7 @@ except ImportError as exc:
     Document = Any
     RecursiveCharacterTextSplitter = None
     CrossEncoder = None
+    SentenceTransformer = None
     RAG_IMPORT_ERROR = exc
 else:
     RAG_IMPORT_ERROR = None
@@ -83,14 +84,28 @@ def _embedding_vector(raw: Any) -> list[float]:
 
 class HFApiEmbeddings:
     def __init__(self, model: str):
-        self.model = model
+        _require_rag_dependencies()
+        self.model_name = model
+        self._model = SentenceTransformer(model)
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
-        return [self.embed_query(text) for text in texts]
+        vectors = self._model.encode(
+            list(texts),
+            batch_size=32,
+            show_progress_bar=False,
+            convert_to_numpy=True,
+            normalize_embeddings=False,
+        )
+        return [vec.astype("float32").tolist() for vec in vectors]
 
     def embed_query(self, text: str) -> list[float]:
-        raw = _hf_client().feature_extraction(text, model=self.model)
-        return _embedding_vector(raw)
+        vector = self._model.encode(
+            text,
+            show_progress_bar=False,
+            convert_to_numpy=True,
+            normalize_embeddings=False,
+        )
+        return vector.astype("float32").tolist()
 
 MAX_VECTORSTORE_REBUILD_ATTEMPTS = 2
 RERANK_TOP_N = 8
