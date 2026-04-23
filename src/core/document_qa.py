@@ -42,6 +42,16 @@ IMAGE_SETUP_KEYWORDS = (
 )
 
 
+_HF_CLIENT: InferenceClient | None = None
+
+
+def _hf_client() -> InferenceClient:
+    global _HF_CLIENT
+    if _HF_CLIENT is None:
+        _HF_CLIENT = InferenceClient(token=HF_TOKEN)
+    return _HF_CLIENT
+
+
 def _response_text(response) -> str:
     try:
         return response.choices[0].message.content or ""

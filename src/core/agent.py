@@ -11,6 +11,16 @@ from src.core.prompt import build_system_prompt
 from src.core.tool_catalog import EMAIL_REQUIRED_TOOLS
 from src.core.tools import execute_tool_call
 
+_HF_CLIENT: InferenceClient | None = None
+
+
+def _hf_client() -> InferenceClient:
+    global _HF_CLIENT
+    if _HF_CLIENT is None:
+        _HF_CLIENT = InferenceClient(token=HF_TOKEN)
+    return _HF_CLIENT
+
+
 def _response_text(response) -> str:
     try:
         return response.choices[0].message.content or ""

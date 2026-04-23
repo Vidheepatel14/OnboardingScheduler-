@@ -15,7 +15,19 @@ WORK_END_HOUR = 17   # 5 PM
 LOCAL_TIMEZONE = "America/New_York"
 
 # Hugging Face API configuration
-HF_TOKEN = "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"
+def _load_hf_token() -> str:
+    token = os.getenv("HF_TOKEN")
+    if token:
+        return token
+    try:
+        import streamlit as st
+
+        return st.secrets["HF_TOKEN"]
+    except Exception:
+        return ""
+
+
+HF_TOKEN = _load_hf_token()
 HF_API_TIMEOUT = int(os.getenv("HF_API_TIMEOUT", "90"))
 
 # Hosted model configuration
