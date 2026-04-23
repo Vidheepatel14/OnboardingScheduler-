@@ -6,6 +6,7 @@ try:
 except ImportError as exc:
     raise SystemExit("Streamlit is not installed. Add it from OnboardingScheduler/requirements.txt.") from exc
 
+from config.settings import DOCS_DIR, UPLOAD_DIR
 from src.core.agent import AgentSession
 from src.core.tool_handlers import handle_analyze_document
 from src.database.connection import init_db
@@ -18,7 +19,6 @@ from src.database.task_repository import (
 )
 
 DEFAULT_EMAIL = "new.employee@company.com"
-UPLOAD_DIR = Path(__file__).resolve().parent / "data" / "uploads"
 
 
 def apply_styles() -> None:
@@ -278,7 +278,7 @@ def main() -> None:
     metrics[0].metric("Pending tasks", len(pending_tasks))
     metrics[1].metric(
         "Training documents",
-        len(list((Path(__file__).resolve().parent / "data" / "training_docs").glob("*.pdf"))),
+        len(list(DOCS_DIR.glob("*.pdf"))),
     )
 
     chat_tab, tasks_tab, document_tab = st.tabs(["Assistant", "Tasks", "Document QA"])

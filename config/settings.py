@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DB_PATH = BASE_DIR / "data" / "onboarding.db"
 DOCS_DIR = BASE_DIR / "data" / "training_docs"
 CHROMA_DIR = BASE_DIR / "data" / "chroma_db"
+UPLOAD_DIR = BASE_DIR / "data" / "uploads"
 CREDENTIALS_FILE = BASE_DIR / "credentials.json"
 TOKEN_FILE = BASE_DIR / "token.json"
 

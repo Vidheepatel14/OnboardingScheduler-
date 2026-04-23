@@ -1,8 +1,11 @@
 import sqlite3
 from config.settings import DB_PATH
 
+
 def get_conn():
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     return sqlite3.connect(DB_PATH)
+
 
 def init_db():
     conn = get_conn()

@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+
+# Environment
+.env
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# Credentials (never commit)
+**/credentials.json
+**/token.json
+
+# Database journals
+*.db-journal
+
+# IDE
+.vscode/
+
+# Data (regenerable)
+*.db
+OnboardingScheduler/data/chroma_db/
+OnboardingScheduler/data/uploads/
+
+# Logs
+*.log
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
