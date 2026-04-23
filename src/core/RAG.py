@@ -423,11 +423,15 @@ def build_docs_manifest() -> dict[str, Any]:
     docs = []
     for pdf_path in sorted(DOCS_DIR.glob("*.pdf")):
         stat = pdf_path.stat()
+        sha256 = hashlib.sha256()
+        with pdf_path.open("rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                sha256.update(block)
         docs.append(
             {
                 "name": pdf_path.name,
                 "size": int(stat.st_size),
-                "mtime_ns": int(stat.st_mtime_ns),
+                "sha256": sha256.hexdigest(),
             }
         )
     return {"embedding_model": EMBEDDING_MODEL, "docs": docs}
