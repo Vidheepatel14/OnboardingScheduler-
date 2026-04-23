@@ -1,0 +1,80 @@
+{
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "docs": [
+    {
+      "name": "212011492-Wells-Fargo-Employee-Handbook.pdf",
+      "size": 1702758,
+      "mtime_ns": 1776951550356482831
+    },
+    {
+      "name": "Employee-Manual-8.5x11-2.pdf",
+      "size": 325201,
+      "mtime_ns": 1776951550358250082
+    },
+    {
+      "name": "FPT-HR-Handbook.pdf",
+      "size": 561057,
+      "mtime_ns": 1776951550361007123
+    },
+    {
+      "name": "Getting_Started_Guide.pdf",
+      "size": 615079,
+      "mtime_ns": 1776951550363558873
+    },
+    {
+      "name": "Headphone Setup.pdf",
+      "size": 168253,
+      "mtime_ns": 1776951550365365748
+    },
+    {
+      "name": "IT-Onboarding-and-Offboarding-Policy-2.pdf",
+      "size": 176215,
+      "mtime_ns": 1776951550366692956
+    },
+    {
+      "name": "IT-Security-Policy-6SEPTEMBER2021.pdf",
+      "size": 890001,
+      "mtime_ns": 1776951550370103039
+    },
+    {
+      "name": "LogicalisUS-Paid-Time-Off-2025.pdf",
+      "size": 145702,
+      "mtime_ns": 1776951550371011581
+    },
+    {
+      "name": "New Employee Onboarding Handbook.pdf",
+      "size": 1805547,
+      "mtime_ns": 1776951550377718205
+    },
+    {
+      "name": "Paid-Time-Off-Policy-Sample-202353350046-9d24-447b-bfbc-1c75c39bc90b.pdf",
+      "size": 160559,
+      "mtime_ns": 1776951550378878497
+    },
+    {
+      "name": "SEI.EmployeePolicyHandbook_Operations_2023_v1.045.pdf",
+      "size": 526970,
+      "mtime_ns": 1776951550381989372
+    },
+    {
+      "name": "code-of-conduct.pdf",
+      "size": 650303,
+      "mtime_ns": 1776951550385666205
+    },
+    {
+      "name": "employee-handbook-2.pdf",
+      "size": 290966,
+      "mtime_ns": 1776951550386890622
+    },
+    {
+      "name": "employee-handbook.pdf",
+      "size": 2464711,
+      "mtime_ns": 1776951550395128121
+    },
+    {
+      "name": "labor-and-employment-paid-time-off-pto-and-sick-days-policy.pdf",
+      "size": 148313,
+      "mtime_ns": 1776951550395902288
+    }
+  ]
+}
