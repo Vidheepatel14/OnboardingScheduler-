@@ -313,6 +313,46 @@ def normalize_answer_text(answer_text: str) -> str:
     return cleaned
 
 
+def _load_pdfs_with_labels(docs_dir: Path) -> list[Document]:
+    import fitz
+
+    pages: list[Document] = []
+    for pdf_path in sorted(docs_dir.glob("*.pdf")):
+        try:
+            pdf = fitz.open(str(pdf_path))
+        except Exception as exc:
+            print(f"   ❌ Failed to open {pdf_path.name}: {exc}")
+            continue
+
+        for page_index, page in enumerate(pdf):
+            try:
+                text = page.get_text("text") or ""
+            except Exception:
+                text = ""
+            printed_label = ""
+            try:
+                printed_label = page.get_label() or ""
+            except Exception:
+                printed_label = ""
+            page_label = printed_label.strip() or str(page_index + 1)
+
+            pages.append(
+                Document(
+                    page_content=text,
+                    metadata={
+                        "source": str(pdf_path),
+                        "file_path": str(pdf_path),
+                        "filename": pdf_path.name,
+                        "page": page_index,
+                        "page_label": page_label,
+                        "total_pages": pdf.page_count,
+                    },
+                )
+            )
+        pdf.close()
+    return pages
+
+
 def load_or_create_vectorstore(embeddings) -> tuple[Any, list[Document]]:
     _require_rag_dependencies()
     persist_directory = str(CHROMA_DIR)
@@ -355,8 +395,7 @@ def load_or_create_vectorstore(embeddings) -> tuple[Any, list[Document]]:
             return vectorstore, docs
 
         print("--- No database found. Indexing PDFs... ---")
-        loader = DirectoryLoader(docs_directory, glob="*.pdf", loader_cls=PyMuPDFLoader)
-        pages = loader.load()
+        pages = _load_pdfs_with_labels(DOCS_DIR)
         print(f"Loaded {len(pages)} pages.")
 
         splitter = RecursiveCharacterTextSplitter(
@@ -484,9 +523,11 @@ def summarize_sources(docs: list[Document], max_sources: int = 5) -> list[str]:
 
     for doc in docs[:max_sources]:
         filename = doc.metadata.get("filename", "Unknown File")
-        page = doc.metadata.get("page", 0)
-        page_label = page + 1 if isinstance(page, int) else page
-        label = f"{filename} (Page {page_label})"
+        label_value = doc.metadata.get("page_label")
+        if not label_value:
+            page = doc.metadata.get("page", 0)
+            label_value = page + 1 if isinstance(page, int) else page
+        label = f"{filename} (Page {label_value})"
         if label in seen:
             continue
         seen.add(label)
@@ -501,8 +542,9 @@ def prepare_docs_for_prompt(docs: list[Document]) -> list[Document]:
         metadata = dict(doc.metadata or {})
         source = metadata.get("source", "")
         metadata.setdefault("filename", Path(source).name if source else "Unknown File")
-        page = metadata.get("page", 0)
-        metadata["page_label"] = page + 1 if isinstance(page, int) else page
+        if not metadata.get("page_label"):
+            page = metadata.get("page", 0)
+            metadata["page_label"] = page + 1 if isinstance(page, int) else page
         prepared_docs.append(Document(page_content=doc.page_content, metadata=metadata))
     return prepared_docs
 

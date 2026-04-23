@@ -145,7 +145,7 @@ class AgentSession:
     def _looks_like_policy_question(self, user_input: str) -> bool:
         lowered = user_input.lower()
         policy_keywords = (
-            "policy",
+            "polic",
             "handbook",
             "pto",
             "paid time off",
@@ -156,9 +156,15 @@ class AgentSession:
             "code of conduct",
             "harassment",
             "ethics",
-            "benefits",
+            "benefit",
             "reporting channel",
-            "reporting channels",
+            "guideline",
+            "program",
+            "procedure",
+            "who do i",
+            "who should i",
+            "reach out",
+            "contact",
         )
         return any(keyword in lowered for keyword in policy_keywords)
 
