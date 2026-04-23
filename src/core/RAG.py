@@ -310,7 +310,8 @@ def normalize_answer_text(answer_text: str) -> str:
     lowered = re.sub(r"\s+", " ", cleaned.lower())
     if any(re.search(pattern, lowered) for pattern in NOT_FOUND_PATTERNS):
         return POLICY_NOT_FOUND_RESPONSE
-    return cleaned
+    cleaned = re.sub(r"\s*\bQuote:\s*", "\n\nQuote: ", cleaned)
+    return cleaned.strip()
 
 
 def _load_pdfs_with_labels(docs_dir: Path) -> list[Document]:
